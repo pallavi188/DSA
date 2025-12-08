@@ -18,8 +18,10 @@ public:
         inorder(root->right,cnt);
     }
     int countNodes(TreeNode* root) {
-        int cnt=0;
-        inorder(root,cnt);
-        return cnt;
+       // int cnt=0;
+        // inorder(root,cnt);
+        // return cnt;
+        if(root==NULL) return 0;
+        return 1+countNodes(root->left)+countNodes(root->right);
     }
 };
