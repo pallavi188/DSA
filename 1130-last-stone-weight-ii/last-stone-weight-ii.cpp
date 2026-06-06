@@ -21,7 +21,23 @@ public:
              S += stones[i];
         }
         int tar = S/2;
-        vector<vector<int>>dp(n+1,vector<int>(tar+1,-1));
-        return S -  2*f(n-1,tar,stones,dp);
+        vector<vector<int>>dp(n+1,vector<int>(tar+1,0));
+        for(int t =0;t<=tar;t++){
+            if(stones[0] <= t) dp[0][t] = stones[0];
+            else
+            dp[0][t] = 0;
+        }
+
+        for(int i=1;i<n;i++){
+            for(int t=0;t<=tar;t++){
+                int not_pick = dp[i-1][t];
+                int pick = 0;
+                if(stones[i] <= t){
+                    pick += stones[i] + dp[i-1][t-stones[i]];
+                }
+                dp[i][t] = max(pick,not_pick);
+            }
+        }
+        return S - 2*dp[n-1][tar];
     }
 };
