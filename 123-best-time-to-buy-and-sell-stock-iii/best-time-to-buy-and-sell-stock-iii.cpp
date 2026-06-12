@@ -4,16 +4,7 @@ public:
     int maxProfit(vector<int>& prices) {
         int n=prices.size();
         vector<vector<vector<int>>>dp(n+1,vector<vector<int>>(2,vector<int>(3,0)));
-        for(int buy =0;buy<=1;buy++){
-            for(int cap =0;cap<3;cap++){
-                dp[n][buy][cap] =0;
-            }
-        }
-        for(int idx=0;idx<n;idx++){
-            for(int buy=0;buy<=1;buy++){
-                dp[idx][buy][0] = 0;
-            }
-        }
+       
         for(int idx=n-1;idx>=0;idx--){
             for(int buy=0;buy<=1;buy++){
                 for(int cap=1;cap<3;cap++){
