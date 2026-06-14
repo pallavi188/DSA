@@ -20,7 +20,22 @@ public:
     }
     int mincostTickets(vector<int>& days, vector<int>& costs) {
         int n = days.size();
-        vector<int>dp(366,-1);
-        return f(0,days,costs,dp);
+        vector<int>dp(366,0);
+        for(int idx = n-1;idx>=0;idx--){
+         int cost_1 = costs[0] + dp[idx+1];
+        //2 day pass
+        int j = idx;
+        int max_day7 = days[idx] + 7;
+        while(j < n && days[j] < max_day7) j++;
+        int cost_7 = costs[1] + dp[j];
+        // 30 days pass
+        int k = idx;
+        int max_day30 = days[idx]+30;
+        while(k < n && days[k] < max_day30) k++;
+        int cost_30 = costs[2] + dp[k];
+
+        dp[idx] = min({cost_1,cost_7,cost_30});
+        }
+        return dp[0];
     }
 };
