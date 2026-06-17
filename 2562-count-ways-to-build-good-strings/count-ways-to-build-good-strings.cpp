@@ -1,20 +1,19 @@
 class Solution {
 public:
     int mod = 1e9+7;
-    int f(int i,int low, int high, int zero, int one,vector<int>&dp){
-        if(i>high) return 0;
-        bool addOne = false;
-        if(i>=low && i<=high){
-            addOne = true;
-        }
-        if(dp[i] != -1) return dp[i];
-        //append 0
-        int append0 = f(i+zero,low,high,zero,one,dp);
-        int append1 = f(i+one,low,high,zero,one,dp);
-        return dp[i] = (addOne + append0 + append1)%mod;
-    }
     int countGoodStrings(int low, int high, int zero, int one) {
-        vector<int>dp(high+1,-1);
-        return f(0,low,high,zero,one,dp);
+        vector<int>dp(high+1,0);
+        dp[high] = 1;
+        for(int l=high-1;l>=0;l--){
+            bool addOne = false;
+            if(l>=low) addOne = true;
+            int append0 = 0;
+            if(l+zero <= high) append0 = dp[l+zero];
+            int append1 = 0;
+            if(l+one <= high) append1 = dp[l+one];
+
+            dp[l] = (addOne + append0 + append1)%mod;
+        }
+        return dp[0];
     }
 };
