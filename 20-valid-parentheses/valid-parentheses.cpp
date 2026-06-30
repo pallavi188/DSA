@@ -7,11 +7,10 @@ public:
             if(s[i]=='(' || s[i]=='{'||s[i]=='[') st.push(s[i]);
             else{
             if(st.empty()) return false;
-
-            if((st.top() =='(' && s[i]==')')||
-            (st.top()=='{' && s[i]=='}')||
-            (st.top()=='[' && s[i]== ']'))
-
+            char ch = st.top();
+            if((s[i] ==')' && ch=='(')||
+            (s[i]=='}' && ch=='{')||
+            (s[i]==']' && ch== '['))
             st.pop();
             else
             return false;
