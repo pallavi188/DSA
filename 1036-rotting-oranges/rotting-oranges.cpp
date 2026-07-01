@@ -1,58 +1,48 @@
 class Solution {
 public:
+    vector<vector<int>>directions{{-1,0},{1,0},{0,1},{0,-1}};
     int orangesRotting(vector<vector<int>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
-        
-        queue<pair<pair<int,int>,int>> q;
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-
-        
+        //queue store in the form of {{row,col},time}
+        queue<pair<pair<int,int>,int>>q;
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        //taking the rotten oranges in the queue
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(grid[i][j] == 2){
                     q.push({{i,j},0});
                     vis[i][j] = 2;
+                }else{
+                    vis[i][j] = 0;
                 }
             }
         }
-
-        int time = 0;
-        int delrow[] = {-1,0,1,0};
-        int delcol[] = {0,1,0,-1};
-
+        int time =0;
         while(!q.empty()){
-            int r = q.front().first.first;
-            int c = q.front().first.second;
+            int cur_row = q.front().first.first;
+            int cur_col = q.front().first.second;
             int t = q.front().second;
-            q.pop();
-
             time = max(time,t);
-
-            for(int i=0;i<4;i++){
-                int nrow = r + delrow[i];
-                int ncol = c + delcol[i];
-
-                if(nrow >= 0 && nrow < n && 
-                   ncol >= 0 && ncol < m &&
-                   vis[nrow][ncol] == 0 && 
-                   grid[nrow][ncol] == 1){
-
-                    q.push({{nrow,ncol},t+1});
-                    vis[nrow][ncol] = 2;   
+            q.pop();
+            for(vector<int>&dir : directions){
+                int new_row = cur_row + dir[0];
+                int new_col = cur_col + dir[1];
+                if(new_row >=0 && new_row < n && new_col >= 0 && new_col < m
+                && vis[new_row][new_col] != 2 && grid[new_row][new_col] == 1){
+                    q.push({{new_row,new_col},t+1});
+                    vis[new_row][new_col] = 2;
                 }
             }
         }
-
-        
+        //check if all the fresh oranges are rotten or not
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j] == 1 && vis[i][j] != 2){
+                if(vis[i][j] != 2 && grid[i][j] == 1){
                     return -1;
                 }
             }
         }
-
         return time;
     }
 };
