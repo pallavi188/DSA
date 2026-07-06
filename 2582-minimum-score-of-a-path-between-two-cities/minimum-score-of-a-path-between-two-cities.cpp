@@ -2,12 +2,11 @@ class Solution {
 public:
     void dfs(int u,unordered_map<int,vector<pair<int,int>>>&adj,vector<bool>&vis,int &res){
         vis[u] = true;
-        for(auto &p:adj[u]){
-            int v = p.first;
-            int d = p.second;
-            res = min(res,d);
-            if(!vis[v]){
-                dfs(v,adj,vis,res);
+        for(auto &it:adj[u]){
+            
+            res = min(res,it.second);
+            if(!vis[it.first]){
+                dfs(it.first,adj,vis,res);
             }
         }
     }
