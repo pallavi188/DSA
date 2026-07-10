@@ -8,7 +8,7 @@ public:
         for(auto &it : mpp){
             if(it.second >= 2){
                 return true;
-                break;
+              
             }
         }
         return false;
