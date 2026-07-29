@@ -9,7 +9,7 @@ int n,m,N;
         if(s1[i]==s3[k]){
             result = f(i+1,j,k+1,s1,s2,s3,dp);
         }
-        if(result == true)return true;
+        if(result == true) return dp[i][j][k] = true;
         if(s2[j] == s3[k]){
             result = f(i,j+1,k+1,s1,s2,s3,dp);
         }
