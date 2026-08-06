@@ -4,28 +4,27 @@ public:
         int n = s.length();
         if(t.length()>n)return "";
         unordered_map<char,int>mp;
-        for(char &ch : t)mp[ch]++;
-        int reqCount = t.length();
-        int i =0,j=0;
-        int minWindowSize = INT_MAX;
-        int start_i = 0;
+        for(char ch : t)mp[ch]++;
+        int reqCnt = t.length();
+        int i=0,j=0;
+        int minWindowSize = 1e9;
+        int st_i = 0;
         while(j<n){
             char ch = s[j];
-            if(mp[ch] > 0)reqCount--;
+            if(mp[ch] > 0) reqCnt--;
             mp[ch]--;
-
-            while(reqCount == 0){
+            while(reqCnt == 0){
                 int currWindowSize = j-i+1;
                 if(minWindowSize > currWindowSize){
                     minWindowSize = currWindowSize;
-                    start_i = i;
+                    st_i = i;
                 }
                 mp[s[i]]++;
-                if(mp[s[i]] > 0) reqCount++;
+                if(mp[s[i]] > 0) reqCnt++;
                 i++;
             }
             j++;
         }
-       return minWindowSize == INT_MAX ? "" : s.substr(start_i,minWindowSize); 
+        return minWindowSize == 1e9 ? "": s.substr(st_i,minWindowSize);
     }
 };
