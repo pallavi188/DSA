@@ -11,12 +11,12 @@
  */
 class Solution {
 public:
-    bool isSymmetry(TreeNode* left,TreeNode*right){
-        if(left==NULL || right==NULL) return left==right;
-        if(left->val != right->val) return false;
-        return isSymmetry(left->left,right->right) && isSymmetry(left->right,right->left);
+    bool isSame(TreeNode* left,TreeNode* right){
+        if(left == NULL || right == NULL)return left==right;
+        if(left->val != right->val)return false;
+        return isSame(left->left,right->right) && isSame(left->right,right->left);
     }
     bool isSymmetric(TreeNode* root) {
-        return root==NULL || isSymmetry(root->left,root->right);
+        return root==NULL || isSame(root->left,root->right);
     }
 };
