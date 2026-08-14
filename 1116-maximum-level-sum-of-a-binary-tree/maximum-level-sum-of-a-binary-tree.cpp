@@ -11,16 +11,29 @@
  */
 class Solution {
 public:
-    vector<int>sum = {INT_MIN};
-    void dfs(TreeNode* Node ,  int level =1){
-        if(Node == NULL) return;
-        if(sum.size()==level) sum.push_back(Node->val);
-        else sum[level] += Node->val;
-        dfs(Node->left,level + 1);
-        dfs(Node->right,level+1);
-    }
     int maxLevelSum(TreeNode* root) {
-        dfs(root);
-        return max_element(sum.begin(),sum.end())-sum.begin();
+       queue<TreeNode*>q;
+       int maxi = -1e9;
+       q.push(root);
+       int level = 1;
+       int ansLevel = 1;
+       while(!q.empty()){
+        int size = q.size();
+        int sum = 0;
+        for(int i=0;i<size;i++){
+            TreeNode* curr = q.front();
+            q.pop();
+            sum += curr->val;
+            if(curr->left != NULL)q.push(curr->left);
+            if(curr->right != NULL)q.push(curr->right);
+
+        }
+        if(sum > maxi){
+            maxi = sum;
+            ansLevel = level;
+        }
+        level++;
+       } 
+       return ansLevel;
     }
 };
