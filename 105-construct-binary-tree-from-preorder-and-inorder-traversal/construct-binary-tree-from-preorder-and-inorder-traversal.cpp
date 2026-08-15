@@ -11,24 +11,23 @@
  */
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        deque<int>preorderQueue(preorder.begin(),preorder.end());
-        return build(preorderQueue,inorder);
-    }
-    private:
-    TreeNode* build(deque<int>&preorder,vector<int>&inorder){
-        if(!inorder.empty()){
-            int val = preorder.front();
-            preorder.pop_front();
-            auto it = find(inorder.begin(),inorder.end(),val);
-            int idx = it - inorder.begin();
-            TreeNode* root = new TreeNode(val);
-            vector<int>leftInorder(inorder.begin(),inorder.begin()+idx);
-            vector<int>rightInorder(inorder.begin()+idx+1,inorder.end());
-            root->left = build(preorder,leftInorder);
-            root->right = build(preorder,rightInorder);
-            return root;
+    int search(vector<int>&inorder,int left,int right,int val){
+        for(int i=left;i<=right;i++){
+            if(inorder[i] == val)return i;
         }
-        return nullptr;
+        return -1;
+    }
+    TreeNode* helper(vector<int>&preorder,vector<int>&inorder,int &preIdx,int left,int right){
+        if(left > right)return NULL;
+        TreeNode* root = new TreeNode(preorder[preIdx]);
+        int inIdx = search(inorder,left,right,preorder[preIdx]);
+        preIdx++;
+        root->left = helper(preorder,inorder,preIdx,left,inIdx - 1);
+        root->right = helper(preorder,inorder,preIdx,inIdx+1,right);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+             int preIdx =0;
+             return helper(preorder,inorder,preIdx,0,inorder.size()-1);
     }
 };
