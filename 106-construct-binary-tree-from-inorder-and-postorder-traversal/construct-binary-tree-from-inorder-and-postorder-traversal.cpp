@@ -12,33 +12,21 @@
  */
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        if (inorder.size() != postorder.size())
-            return NULL;
-        unordered_map<int, int> mp;
-        for (int i = 0; i < inorder.size(); ++i)
-            mp[inorder[i]] = i;
-        return helperTree(inorder, postorder, 0, inorder.size() - 1, 0,
-                          postorder.size() - 1, mp);
-    }
+    TreeNode* helper(vector<int>&inorder,int inSt,int inEnd,vector<int>&postorder,int pSt,int pEnd,unordered_map<int,int>&mp){
+        if(inSt > inEnd || pSt>pEnd)return NULL;
+        TreeNode* root = new TreeNode(postorder[pEnd]);
+        int inRoot = mp[root->val];
+        int isLeft = inRoot - inSt;
 
-private:
-    TreeNode* helperTree(vector<int>& inorder, vector<int>& postorder,
-                         int inorderStart, int inorderEnd, int postorderStart,
-                         int postorderEnd, unordered_map<int, int>& mp) {
-        if (inorderStart > inorderEnd || postorderStart > postorderEnd) {
-            return nullptr;
-        }
-        int rootval = postorder[postorderEnd];
-        TreeNode* root = new TreeNode(rootval);
-        int inorderRootIndex = mp[rootval];
-        int leftSubtreeSize = inorderRootIndex - inorderStart;
-        root->left = helperTree(inorder, postorder, inorderStart,
-                                inorderRootIndex - 1, postorderStart,
-                                postorderStart + leftSubtreeSize - 1, mp);
-        root->right =
-            helperTree(inorder, postorder, inorderRootIndex + 1, inorderEnd,
-                       postorderStart + leftSubtreeSize, postorderEnd - 1, mp);
+        root->left = helper(inorder,inSt,inRoot-1,postorder,pSt,pSt+isLeft -1,mp);
+        root->right = helper(inorder,inRoot+1,inEnd,postorder,pSt+isLeft,pEnd-1,mp);
         return root;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        unordered_map<int,int>mp;
+        for(int i=0;i<inorder.size();i++){
+            mp[inorder[i]] = i;
+        }
+        return helper(inorder,0,inorder.size()-1,postorder,0,postorder.size()-1,mp);
     }
 };
