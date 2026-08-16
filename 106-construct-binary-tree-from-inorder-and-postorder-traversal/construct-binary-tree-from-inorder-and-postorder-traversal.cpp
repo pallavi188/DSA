@@ -12,21 +12,27 @@
  */
 class Solution {
 public:
-    TreeNode* helper(vector<int>&inorder,int inSt,int inEnd,vector<int>&postorder,int pSt,int pEnd,unordered_map<int,int>&mp){
-        if(inSt > inEnd || pSt>pEnd)return NULL;
-        TreeNode* root = new TreeNode(postorder[pEnd]);
-        int inRoot = mp[root->val];
-        int isLeft = inRoot - inSt;
+    TreeNode* solve(vector<int>&inorder,vector<int>&postorder,int inStart,int inEnd,int postStart,int postEnd){
+        if(inStart > inEnd || postStart > postEnd)return NULL;
 
-        root->left = helper(inorder,inSt,inRoot-1,postorder,pSt,pSt+isLeft -1,mp);
-        root->right = helper(inorder,inRoot+1,inEnd,postorder,pSt+isLeft,pEnd-1,mp);
+        TreeNode* root = new TreeNode(postorder[postEnd]);
+        //finding root val in inorder 
+        int i=inStart;
+        for(;i<=inEnd;i++){
+            if(inorder[i] == root->val)break;
+        }
+        int leftSize = i-inStart;
+        int rightSize = inEnd - i;
+        root->left = solve(inorder,postorder,inStart,i-1,postStart,postStart+leftSize-1);
+        root->right = solve(inorder,postorder,i+1,inEnd,postEnd-rightSize,postEnd-1);
         return root;
     }
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        unordered_map<int,int>mp;
-        for(int i=0;i<inorder.size();i++){
-            mp[inorder[i]] = i;
-        }
-        return helper(inorder,0,inorder.size()-1,postorder,0,postorder.size()-1,mp);
+            int n = inorder.size();
+            int inStart = 0;
+            int inEnd = n-1;
+            int postStart = 0;
+            int postEnd = n-1;
+            return solve(inorder,postorder,inStart,inEnd,postStart,postEnd);
     }
 };
