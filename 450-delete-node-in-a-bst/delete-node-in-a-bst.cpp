@@ -33,12 +33,12 @@ public:
                 delete root;
                 return temp;
             } else {
-                TreeNode* succ = root->right;
-                while (succ->left)
-                    succ = succ->left;
+                TreeNode* inorderPre = root->left;
+                while (inorderPre->right)
+                    inorderPre = inorderPre->right;
 
-                root->val = succ->val;
-                root->right = deleteNode(root->right, succ->val);
+                root->val = inorderPre->val;
+                root->left = deleteNode(root->left, inorderPre->val);
             }
         }
             return root;
