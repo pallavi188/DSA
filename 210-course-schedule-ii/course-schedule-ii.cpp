@@ -1,34 +1,38 @@
 class Solution {
 public:
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        //form graph
-        vector<vector<int>>adj(numCourses);
-        for(auto it : prerequisites){
-            adj[it[1]].push_back(it[0]);
+    vector<int> findOrder(int numCourses, vector<vector<int>>& preR) {
+        int v = numCourses;
+       //form the graph
+       vector<int>adj[v];
+       for(auto it:preR){
+        adj[it[1]].push_back(it[0]);
+       }
+      //1.indegree calculation for each node
+      vector<int>indegree(v,0);
+      for(int i=0;i<v;i++){
+        for(auto it : adj[i]){
+            indegree[it]++;
         }
-        //topo sort
-        vector<int>indegree(numCourses,0);
-        //calculate indegree of each vertices
-        for(int i=0;i<numCourses;i++){
-            for(auto it : adj[i]){
-                indegree[it]++;
-            }
+      }
+      //2.queue formation
+      queue<int>q;
+      for(int i=0;i<v;i++){
+        if(indegree[i]==0){
+            q.push(i);
         }
-        queue<int>q;
-        for(int i=0;i<numCourses;i++){
-            if(indegree[i]==0)q.push(i);
+      }
+      vector<int>topoOrder;
+      while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        topoOrder.push_back(node);
+        for(auto it : adj[node]){
+            indegree[it]--;
+            if(indegree[it]==0)q.push(it);
         }
-        vector<int>topo;
-        while(!q.empty()){
-            int node = q.front();
-            q.pop();
-            topo.push_back(node);
-            for(auto it:adj[node]){
-                indegree[it]--;
-                if(indegree[it]==0)q.push(it);
-            }
-        }
-        if(topo.size()==numCourses) return topo;
-        return {};
+      }
+      if(topoOrder.size() == v)return topoOrder;
+      else
+      return {};
     }
 };
