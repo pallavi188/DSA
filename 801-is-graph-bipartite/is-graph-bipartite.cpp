@@ -1,31 +1,28 @@
 class Solution {
 public:
-    bool bfs(int start,int v,vector<vector<int>>&graph,int color[]){
+    bool bfs(int node,int n,vector<vector<int>>&graph,vector<int>&color){
         queue<int>q;
-        q.push(start);
-        color[start] = 0;
+        q.push(node);
+        color[node] = 0;
         while(!q.empty()){
-            int node = q.front();
+            int currNode = q.front();
             q.pop();
-            for(auto it : graph[node]){
-                if(color[it] == -1){
-                color[it] = !color[node];
-                q.push(it);
-                }else if(color[it]==color[node]){
-                    return false;
-                }
+            //travel its adjacent node
+            for(auto it : graph[currNode]){
+                if(color[it] == -1) {
+                    color[it] = !color[currNode];
+                    q.push(it);
+                }else if(color[it] == color[currNode])return false;
             }
         }
         return true;
-    }
+    } 
     bool isBipartite(vector<vector<int>>& graph) {
-       int v = graph.size();
-       int color[v];
-       for(int i=0;i<v;i++)color[i] = -1;
-       for(int i=0;i<v;i++){
-        if(color[i] == -1){
-            if(bfs(i,v,graph,color)==false) return false;
-        }
+       int n = graph.size();
+       vector<int>color(n,-1);
+       for(int i=0;i<n;i++){
+           if(color[i] == -1)
+           if(!bfs(i,n,graph,color))return false;
        }
        return true;
     }
