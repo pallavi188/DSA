@@ -1,33 +1,46 @@
-
-class Solution {
-public:
-    void dfs(int node,vector<int>&vis,vector<int>adjLs[]){
-        vis[node] = 1;
-        for(int &it : adjLs[node]){
-            if(!vis[it]){
-                dfs(it,vis,adjLs);
-            }
+class DisjointSet{
+    public:
+    vector<int>parent,rank;
+    DisjointSet (int n){
+        rank.resize(n+1,0);
+        parent.resize(n+1);
+        for(int i=0;i<n;i++){
+            parent[i] = i;
         }
     }
+    int findUParent(int node){
+        if(node == parent[node])return node;
+        return parent[node] = findUParent(parent[node]);
+    }
+    void unionByRank(int u,int v){
+        int ulp_u = findUParent(u);
+        int ulp_v = findUParent(v);
+        if(ulp_u == ulp_v) return;
+        if(rank[ulp_u] < rank[ulp_v]){
+            parent[ulp_u] = ulp_v;
+        }
+        else if(rank[ulp_v] < rank[ulp_u]) parent[ulp_v] = ulp_u;
+        else{
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+};
+class Solution {
+public:
     int findCircleNum(vector<vector<int>>& isConnected) {
         int v = isConnected.size();
-        //convert adjMatrix into adjList
-        vector<int>adjLs[v];
+        DisjointSet ds(v);
         for(int i=0;i<v;i++){
             for(int j=0;j<v;j++){
-                if(isConnected[i][j] == 1 && i != j){
-                    adjLs[i].push_back(j);
-                    adjLs[j].push_back(i);
+                if(isConnected[i][j] == 1){
+                    ds.unionByRank(i,j);
                 }
             }
         }
         int cnt = 0;
-        vector<int>vis(v,0);
         for(int i=0;i<v;i++){
-            if(!vis[i]){
-                cnt++;
-                dfs(i,vis,adjLs);
-            }
+            if(ds.parent[i] == i) cnt++;
         }
         return cnt;
     }
