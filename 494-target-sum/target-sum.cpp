@@ -1,28 +1,23 @@
 class Solution {
 public:
+    int cntSubset(int idx,vector<int>&nums,int reqSum,vector<vector<int>>&dp){
+        int n = nums.size();
+        if(idx>=n)return reqSum == 0;
+        if(reqSum < 0)return 0;
+        if(dp[idx][reqSum] != -1) return dp[idx][reqSum];
+        int pick = cntSubset(idx+1,nums,reqSum - nums[idx],dp);
+        int not_pick = cntSubset(idx+1,nums,reqSum,dp);
+        return dp[idx][reqSum] = (pick + not_pick);
+    }
     int findTargetSumWays(vector<int>& nums, int target) {
-    int totsum =0 ;
-        for(int num:nums){
-            totsum += num;
-        }
-        if(abs(target)>totsum) return 0;
-        int s2 = (totsum - target)/2 ;
-        if(totsum - target<0 || (totsum - target)%2 != 0) return 0;
-        vector<int>prev(s2+1,0),curr(s2+1,0);
-
-        prev[0] = 1;
-
-        if(nums[0]<=s2) prev[nums[0]] += 1;
-
-        for(int i=1;i<nums.size();i++){
-            for(int sum = 0;sum<=s2;++sum){
-                int not_pick = prev[sum];
-               int pick =0;
-                if(nums[i] <= sum) pick = prev[sum - nums[i]];
-                curr[sum] = pick + not_pick;
-            }
-            prev = curr;
-        }
-        return prev[s2];
+        int n = nums.size();
+        int totalSum = 0;
+       
+        for(int i=0;i<n;i++)totalSum += nums[i];
+        if(abs(target) > totalSum)return 0;
+        if((totalSum+target)%2 != 0)return 0;
+        int reqSum = (totalSum + target)/2;
+         vector<vector<int>>dp(n+1,vector<int>(reqSum+1,-1));
+        return cntSubset(0,nums,reqSum,dp);
     }
 };
