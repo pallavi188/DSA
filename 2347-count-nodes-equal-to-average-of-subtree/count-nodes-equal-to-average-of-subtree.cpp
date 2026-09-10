@@ -11,21 +11,20 @@
  */
 class Solution {
 public:
-    int findSum(TreeNode* root,int &cntNode){
-        if(root == NULL)return 0;
-        cntNode++;
-        int lSum = findSum(root->left,cntNode);
-        int rSum = findSum(root->right,cntNode);
-        return lSum + rSum + root->val;
+    int res;
+    pair<int,int>solve(TreeNode* root){
+        if(root == NULL)return {0,0};
+        auto p1 = solve(root->left);
+        auto p2 = solve(root->right);
+        int totalSum = p1.first + p2.first + root->val;
+        int totalCnt = p1.second + p2.second + 1;
+        int avg = (totalSum)/(totalCnt);
+        if(root->val == avg)res++;
+        return {totalSum,totalCnt};
     }
     int averageOfSubtree(TreeNode* root) {
-        if(root == NULL)return 0;
-        int res =0;
-        int cntNode =0;
-        int sum = findSum(root,cntNode);
-        if(root->val == sum/cntNode)res++;
-        res += averageOfSubtree(root->left);
-        res += averageOfSubtree(root->right);
+        res = 0;
+        solve(root);
         return res;
     }
 };
