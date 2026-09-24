@@ -8,13 +8,11 @@ public:
             hash[s[r]-'A']++;
             maxFreq = max(maxFreq,hash[s[r]-'A']);
             //trim from left side if it exceed k
-            while((r-l+1)-maxFreq > k){
+            if((r-l+1)-maxFreq > k){
                 hash[s[l]-'A']--;
                 maxFreq =0;
                 //find new MAX freq character
-                for(int i=0;i<26;i++){
-                    maxFreq = max(maxFreq,hash[i]);
-                }
+                
                 l++;
             }
             if((r-l+1) - maxFreq <= k)
