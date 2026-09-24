@@ -2,21 +2,25 @@ class Solution {
 public:
     int characterReplacement(string s, int k) {
         int n = s.length();
-        int l = 0, maxlen = 0, maxfreq = 0;
-        int hash[26] = {0};
-
-        for (int r = 0; r < n; r++) {
-            hash[s[r] - 'A']++;
-            maxfreq = max(maxfreq, hash[s[r] - 'A']);
-
-            // shrink window if replacements exceed k
-            while ((r - l + 1) - maxfreq > k) {
-                hash[s[l] - 'A']--;
+        int l=0,r=0,maxLen = 0,maxFreq = 0;
+        vector<int>hash(26,0);
+        while(r<n){
+            hash[s[r]-'A']++;
+            maxFreq = max(maxFreq,hash[s[r]-'A']);
+            //trim from left side if it exceed k
+            while((r-l+1)-maxFreq > k){
+                hash[s[l]-'A']--;
+                maxFreq =0;
+                //find new MAX freq character
+                for(int i=0;i<26;i++){
+                    maxFreq = max(maxFreq,hash[i]);
+                }
                 l++;
             }
-
-            maxlen = max(maxlen, r - l + 1);
+            if((r-l+1) - maxFreq <= k)
+               maxLen = max(maxLen,r-l+1);
+               r++;
         }
-        return maxlen;
+        return maxLen;
     }
 };
