@@ -2,34 +2,16 @@ class Solution {
 public:
     int longestOnes(vector<int>& nums, int k) {
         int n = nums.size();
-        vector<int>prefixZero(n+1,0);
-        for(int i=0;i<n;i++){
-            if(nums[i] == 0)
-              prefixZero[i+1] = prefixZero[i] + 1;
-            else 
-              prefixZero[i+1] = prefixZero[i];  
-        }
-        int maxLen = 0;
-        //try every index as a starting point
-        for(int st=0;st<n;st++){
-            int l = st,h = n-1;
-            int farthest = st - 1;
-            //binary search to find the farthest zero
-            while(l <= h){
-                int mid = l + (h-l)/2;
-                int zeroCnt = prefixZero[mid+1] - prefixZero[st];
-                
-                if(zeroCnt <= k){
-                    farthest = mid;
-                    l = mid+1;
+        int l =0,zeroCnt = 0,maxLen=0;
+        for(int j=0;j<n;j++){
+            if(nums[j] == 0)zeroCnt++;
+            while(zeroCnt>k){
+                if(nums[l]==0){
+                    zeroCnt--;
                 }
-                else{
-                    h = mid-1;
-                }
+                l++;
             }
-            if(farthest >= st){
-                maxLen = max(maxLen,farthest-st+1);
-            }
+            maxLen = max(maxLen,j-l+1);
         }
         return maxLen;
     }
