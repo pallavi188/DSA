@@ -17,26 +17,22 @@ public:
         ListNode* curr = dummy;
         while (t1 != NULL && t2 != NULL) {
             if (t1->val <= t2->val) {
-                ListNode* temp = new ListNode(t1->val);
-                curr->next = temp;
+                curr->next = t1;
                 curr = curr->next;
                 t1 = t1->next;
             } else {
-                ListNode* temp2 = new ListNode(t2->val);
-                curr->next = temp2;
+                curr->next = t2;
                 curr = curr->next;
                 t2 = t2->next;
             }
         }
         while (t1 != NULL) {
-            ListNode* temp = new ListNode(t1->val);
-            curr->next = temp;
+            curr->next = t1;
             curr = curr->next;
             t1 = t1->next;
         }
         while (t2 != NULL) {
-            ListNode* temp2 = new ListNode(t2->val);
-            curr->next = temp2;
+            curr->next = t2;
             curr = curr->next;
             t2 = t2->next;
         }
