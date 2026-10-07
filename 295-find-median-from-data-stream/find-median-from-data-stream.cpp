@@ -1,34 +1,32 @@
 class MedianFinder {
 public:
-    priority_queue<int>left_max_heap;
-    priority_queue<int,vector<int>,greater<int>>right_min_heap;
+    priority_queue<int>l_max_heap;
+    priority_queue<int,vector<int>,greater<int>>r_min_heap;
 
     MedianFinder() {
-        
     }
     
     void addNum(int num) {
-         if(left_max_heap.empty() || num < left_max_heap.top()){
-            left_max_heap.push(num);
-         }else{
-            right_min_heap.push(num);
-         }
-         //alway maintain the max difference btw both heaps at max 1
-         if(abs((int)left_max_heap.size() - (int)right_min_heap.size()) > 1){
-            right_min_heap.push(left_max_heap.top());
-            left_max_heap.pop();
-         }else if(left_max_heap.size() < right_min_heap.size()){
-            left_max_heap.push(right_min_heap.top());
-            right_min_heap.pop();
-         }
+        if(l_max_heap.empty() || num < l_max_heap.top()){
+            l_max_heap.push(num);
+        }else{
+            r_min_heap.push(num);
+        }
+        //maintain one extra element in the left max heap
+        if(r_min_heap.size()>l_max_heap.size()){
+            l_max_heap.push(r_min_heap.top());
+            r_min_heap.pop();
+        }else if(l_max_heap.size() - r_min_heap.size()>1){
+            r_min_heap.push(l_max_heap.top());
+            l_max_heap.pop();
+        }
     }
     
     double findMedian() {
-         if(left_max_heap.size() == right_min_heap.size()){
-            //even number of elements are present
-            return (double)(left_max_heap.top() + right_min_heap.top())/2;
-         }
-         return left_max_heap.top();
+        if(l_max_heap.size() == r_min_heap.size())
+            return (double)(l_max_heap.top()+r_min_heap.top())/2;
+        else 
+            return (double)(l_max_heap.top());    
     }
 };
 
