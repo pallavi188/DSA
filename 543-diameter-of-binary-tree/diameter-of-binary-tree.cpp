@@ -11,16 +11,20 @@
  */
 class Solution {
 public:
-    int height(TreeNode* root,int &maxDia){
-        if(!root) return 0;
-        int leftHeight = height(root->left,maxDia);
-        int rightHeight = height(root->right,maxDia);
-        maxDia = max(maxDia,leftHeight+rightHeight);
-        return 1 + max(leftHeight,rightHeight);
+    int height(TreeNode*root){
+        if(!root)return 0;
+        int lh = height(root->left);
+        int rh = height(root->right);
+        return 1 + max(lh,rh);
     }
     int diameterOfBinaryTree(TreeNode* root) {
-       int maxDia = 0;
-       height(root,maxDia);
-       return maxDia;
+        if(!root)return 0;
+        int leftH = height(root->left);
+        int rightH = height(root->right);
+        int currDia = leftH + rightH;
+        
+        int leftDia = diameterOfBinaryTree(root->left);
+        int rightDia = diameterOfBinaryTree(root->right);
+        return max({currDia,leftDia,rightDia});
     }
 };
