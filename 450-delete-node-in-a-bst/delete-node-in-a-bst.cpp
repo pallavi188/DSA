@@ -13,34 +13,36 @@
 class Solution {
 public:
     TreeNode* deleteNode(TreeNode* root, int val) {
-        if (root == NULL)
-            return root;
-
-        if (root->val > val)
-            root->left = deleteNode(root->left, val);
-        else if (root->val < val)
-            root->right = deleteNode(root->right, val);
-        else {
-            if (root->left == NULL && root->right == NULL) {
-                delete root;
-               return NULL;
-            } else if (root->left == NULL) {
-                TreeNode* temp = root->right;
-                delete root;
-                return temp;
-            } else if (root->right == NULL) {
-                TreeNode* temp = root->left;
-                delete root;
-                return temp;
-            } else {
-                TreeNode* inorderPre = root->left;
-                while (inorderPre->right)
-                    inorderPre = inorderPre->right;
-
-                root->val = inorderPre->val;
-                root->left = deleteNode(root->left, inorderPre->val);
-            }
-        }
-            return root;
-        }
+              if(!root)return root;
+              if(root->val > val)root->left = deleteNode(root->left,val);
+              else if(root->val < val)root->right = deleteNode(root->right,val);
+              else{
+                //root->val == val
+                   if(root->left == NULL  && root->right == NULL){
+                    //leaf node 
+                    delete(root);
+                    return NULL;
+                   }//node to be f=deleted had one child
+                   else if(root->left == NULL){
+                      TreeNode* node = root->right;
+                      delete(root);
+                      return node;
+                   }else if(root->right == NULL){
+                    TreeNode* node = root->left;
+                    delete(root);
+                    return node;
+                   }
+                   else{
+                    //node has two child then find its inorder predecessor and replace it the delete it
+                    TreeNode* inorderP = root->left;
+                    while(inorderP->right){
+                        inorderP = inorderP->right;
+                    }
+                        root->val = inorderP->val;
+                        root->left = deleteNode(root->left,inorderP->val);
+                    
+                   }
+              }
+              return root;
+         }
     };
