@@ -12,28 +12,33 @@
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-          vector<int>ans;
+          vector<int>inorder;
           TreeNode* curr = root;
           while(curr != NULL){
-            if(curr->left == NULL){
-                ans.push_back(curr->val);
+               if(curr->left == NULL){
+                //case1 curr ka left null h 
+                inorder.push_back(curr->val);
                 curr = curr->right;
-            }else{
-                //find the Inorder Predecessor
-                TreeNode* IP = curr->left;
-                while(IP->right != NULL && IP->right != curr){
-                    IP = IP->right;
-                }
-                if(IP->right == NULL){
-                    IP->right = curr; // create a thread
-                    curr = curr->left;
-                }else{
-                    IP->right = NULL;
-                    ans.push_back(curr->val);
-                    curr = curr->right;
-                }
-            }
+               }
+               else{
+                    //case2 curr=>left null nhi h 
+                    TreeNode* prev = curr->left;
+                    while(prev->right && prev->right != curr){
+                        //right side me last node nhi h ye tho last find karo i.e inorder predecessor find krna h 
+                        prev = prev->right;
+                    }
+                    if(prev->right == NULL){
+                        //right side ka last node mil gya tho uska thread curr node se jod do 
+                        prev->right = curr;
+                        curr = curr->left;
+
+                    }else{
+                        prev->right = NULL;
+                        inorder.push_back(curr->val);
+                        curr = curr->right;
+                    }
+               }
           }
-        return ans;
+          return inorder;
     }
 };
