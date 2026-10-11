@@ -11,23 +11,26 @@
  */
 class Solution {
 public:
-    void inorder(TreeNode* root,vector<TreeNode*>&order){
+    //inorder traversal of the given bst
+    void inorder(TreeNode* root,vector<int>&order){
         if(!root)return;
         inorder(root->left,order);
-        order.push_back(root);
+        order.push_back(root->val);
         inorder(root->right,order);
     }
+    //again inorder traversal to replace incorrect node value with correct one
+    void replaceVal(TreeNode*root,vector<int>&order,int &idx){
+        if(!root)return;
+        replaceVal(root->left,order,idx);
+        root->val = order[idx++];
+        replaceVal(root->right,order,idx);
+    }
     void recoverTree(TreeNode* root) {
-         vector<TreeNode*>order;
-         inorder(root,order);
-         TreeNode* first = NULL;
-         TreeNode* second = NULL;
-         for(int i=0;i<order.size()-1;i++){
-            if(order[i]->val > order[i+1]->val){
-                if(first == NULL)first = order[i];
-                second = order[i+1];
-            }
-         }
-         swap(first->val,second->val);
+        vector<int>order;
+        inorder(root,order);
+        sort(order.begin(),order.end());
+        int idx = 0;
+        replaceVal(root,order,idx);
+        
     }
 };
