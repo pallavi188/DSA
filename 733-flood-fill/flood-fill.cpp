@@ -1,26 +1,25 @@
 class Solution {
 public:
-    void dfs(int sr,int sc,vector<vector<int>>&ans,vector<vector<int>>&image,
-    int color,int initialcolor){
-         ans[sr][sc] = color;
-         int n = image.size();
-         int m = image[0].size();
-         int dr[] = {-1,1,0,0};
-         int dc[] = {0,0,1,-1};
-         for(int i=0;i<4;i++){
-            int newRow = sr + dr[i];
-            int newCol = sc + dc[i];
-            if(newRow>=0 && newRow<n && newCol>=0 && newCol < m && ans[newRow][newCol] != color && image[newRow][newCol] == initialcolor){
-                dfs(newRow,newCol,ans,image,color,initialcolor);
-            }
-         }
-    }
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+    void dfs(int sr,int sc,vector<vector<int>>&image,vector<vector<int>>&Grid,int color,int oldColor){
+        Grid[sr][sc] = color;
         int n = image.size();
         int m = image[0].size();
-       int initialColor = image[sr][sc];
-       vector<vector<int>>ans = image;
-       dfs(sr,sc,ans,image,color,initialColor);
-       return ans;
+        int dr[]= {-1,1,0,0};
+        int dc[]= {0,0,1,-1};
+        for(int i=0;i<4;i++){
+            int new_sr = sr + dr[i];
+            int new_sc = sc + dc[i];
+            if(new_sr >= 0 && new_sr < n && new_sc >= 0 && new_sc < m && 
+               image[new_sr][new_sc]== oldColor){
+                dfs(new_sr,new_sc,image,Grid,color,oldColor);
+            }
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+       vector<vector<int>>&Grid = image;
+       int oldColor = image[sr][sc];
+       if(color == oldColor)return image;
+       dfs(sr,sc,image,Grid,color,oldColor);
+       return Grid;
     }
 };
