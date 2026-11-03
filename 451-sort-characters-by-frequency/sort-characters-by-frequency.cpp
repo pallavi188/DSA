@@ -1,21 +1,25 @@
 class Solution {
 public:
     string frequencySort(string s) {
-          int n = s.length();
-          string str = "";
-          unordered_map<char,int>mp;
-          for(int i=0;i<n;i++){
-            mp[s[i]]++;
-          }   
-          vector<pair<char,int>>v(mp.begin(),mp.end());
-          sort(v.begin(),v.end(),[](auto &a,auto &b){
-              if(a.second != b.second) return a.second > b.second;
-              return a.first < b.first;
-          });
-          for(auto it : v){
-            for(int i=0;i<it.second;i++)
-            str += it.first;
-          }
-          return str;
+        struct comp{
+            bool operator()(pair<char,int>&p1,pair<char,int>&p2){
+                return p1.second < p2.second;
+            }
+        };
+        priority_queue<pair<char,int>,vector<pair<char,int>>,comp>pq;
+        unordered_map<char,int>mp;
+        for(char &ch : s){
+            mp[ch]++;
+        }
+        for(auto &it : mp){
+            pq.push({it.first,it.second});
+        }
+        string result = "";
+        while(!pq.empty()){
+            pair<char,int>temp = pq.top();
+            pq.pop();
+            result += string(temp.second,temp.first);
+        }
+        return result;
     }
 };
